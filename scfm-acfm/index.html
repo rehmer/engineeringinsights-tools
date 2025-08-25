@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SCFM ↔ ACFM ↔ Mass Flow — Engineering Insights</title>
+  <meta name="description" content="Single‑file educational calculator for converting SCFM to ACFM and estimating mass flow under ideal-gas assumptions (air)."/>
+  <!-- (Optional) Google Analytics / AdSense can be added here once approved for your domain.
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config', 'G-XXXXXXX');
+  </script>
+  -->
+  <style>
+    :root{--bg:#0b1020;--panel:#0f172a;--text:#e6eaf2;--muted:#9aa3b2;--line:#1e293b;--accent:#5eead4;--max:900px}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Inter,Roboto,sans-serif}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:16px}
+    header,footer{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,0.02)}
+    h1{margin:6px 0 10px 0}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+    .grid{display:grid;gap:16px}
+    @media(min-width:880px){.grid-3{grid-template-columns:1fr 1fr 1fr} .grid-2{grid-template-columns:1fr 1fr}}
+    label{display:block;font-size:14px;color:var(--muted);margin:8px 0 4px}
+    input,select,button,textarea{width:100%;background:#0b1020;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
+    button{cursor:pointer}
+    .row{display:grid;gap:12px}
+    @media(min-width:600px){.row{grid-template-columns:1fr 1fr}}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .out{font-size:20px;font-weight:700}
+    .note{font-size:13px;color:#cbd5e1;white-space:pre-line}
+    .muted{color:var(--muted)}
+    details{margin-top:8px}
+    .ad{display:flex;align-items:center;justify-content:center;min-height:120px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);}
+    .small{font-size:12px}
+    .right{text-align:right}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="font-weight:800">Engineering Insights</div>
+      <nav class="small muted">SCFM ↔ ACFM ↔ Mass Flow</nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:18px;padding-bottom:18px">
+    <h1>SCFM ↔ ACFM ↔ Mass Flow <span class="small muted">v1 (educational)</span></h1>
+    <p class="muted">Ideal-gas approximation (air). Mass flow estimated from SCFM × standard air density. See notes for assumptions.</p>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>SCFM (standard ft³/min)</label>
+          <input id="scfm" type="number" step="any" placeholder="e.g., 100" />
+        </div>
+        <div>
+          <label>Actual Pressure</label>
+          <div class="row" style="grid-template-columns:120px 1fr">
+            <select id="punit">
+              <option value="psig">psig</option>
+              <option value="psia">psia</option>
+            </select>
+            <input id="p" type="number" step="any" placeholder="e.g., 20"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Actual Temperature (°F)</label>
+          <input id="tf" type="number" step="any" placeholder="e.g., 80"/>
+        </div>
+        <div>
+          <label>Gas (fixed for v1)</label>
+          <input value="Air (ideal gas)" disabled/>
+        </div>
+      </div>
+
+      <details>
+        <summary class="muted">Advanced settings (standards)</summary>
+        <div class="row">
+          <div>
+            <label>Standard Temperature</label>
+            <select id="tstd">
+              <option value="60">60°F (15.6°C)</option>
+              <option value="68" selected>68°F (20°C)</option>
+            </select>
+          </div>
+          <div>
+            <label>Standard Pressure (psia)</label>
+            <input id="pstd" type="number" step="any" value="14.696"/>
+          </div>
+        </div>
+      </details>
+
+      <div class="actions" style="margin-top:12px">
+        <button id="calc">Calculate</button>
+        <button id="reset" style="background:#111827">Clear</button>
+        <button id="copy" title="Copy results to clipboard" style="margin-left:auto">Copy results</button>
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-top:16px">
+      <div class="card">
+        <div class="muted small">ACFM (actual ft³/min)</div>
+        <div class="out" id="acfm">—</div>
+      </div>
+      <div class="card">
+        <div class="muted small">Mass Flow</div>
+        <div class="out"><span id="m_lbm">—</span> <span class="small muted">lbm/min</span></div>
+        <div class="out" style="font-size:16px;margin-top:6px"><span id="m_kgs">—</span> <span class="small muted">kg/s</span></div>
+      </div>
+      <div class="card">
+        <div class="muted small">Air density @ actual conditions</div>
+        <div class="out" id="rho">—</div>
+        <div class="small muted">lbm/ft³</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="muted small" style="margin-bottom:6px">Notes & assumptions</div>
+      <div id="notes" class="note">Enter SCFM, pressure, and temperature.</div>
+    </div>
+
+    <div class="card ad" style="margin-top:16px">
+      <!-- AdSense placeholder: replace this whole div with your ad code once your domain is approved.
+      Example:
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXX" crossorigin="anonymous"></script>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXX" data-ad-slot="YYYY" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span>Ad slot (replace with your AdSense code)</span>
+    </div>
+
+    <div class="small muted" style="margin-top:12px">
+      Educational use only. Not a substitute for professional engineering judgment, peer review, or applicable codes/standards.
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap small muted">© <span id="yr"></span> Engineering Insights</div>
+  </footer>
+
+<script>
+  // Constants
+  const R_air = 53.35;   // ft·lbf/(lbm·R)  (ideal gas constant for air)
+  const P_ATM = 14.696;  // psia
+  function F_to_R(Tf){ return Tf + 459.67; }
+  function lbm_min_to_kg_s(m){ return (m * 0.45359237) / 60.0; }
+
+  function stdDensity(stdF){
+    // representative standard air density at 1 atm
+    // 60°F ≈ 0.0765 lbm/ft³, 68°F ≈ 0.0750 lbm/ft³
+    return (Math.abs(stdF - 60) < 0.5) ? 0.0765 : 0.0750;
+  }
+
+  function rho_air_psia_T(P_psia, T_F){
+    const T_R = F_to_R(T_F);
+    return P_psia / (R_air * T_R); // lbm/ft³
+  }
+
+  function fmt(x, d=4){
+    if (!isFinite(x)) return "—";
+    return Number(x).toLocaleString(undefined, {maximumFractionDigits:d});
+  }
+
+  function calc(){
+    const scfm = parseFloat(document.getElementById('scfm').value);
+    const Punit = document.getElementById('punit').value;
+    const P_in = parseFloat(document.getElementById('p').value);
+    const T_act_F = parseFloat(document.getElementById('tf').value);
+    const T_std_F = parseFloat(document.getElementById('tstd').value);
+    const P_std = parseFloat(document.getElementById('pstd').value) || P_ATM;
+
+    const out_acfm = document.getElementById('acfm');
+    const out_m_lbm = document.getElementById('m_lbm');
+    const out_m_kgs = document.getElementById('m_kgs');
+    const out_rho = document.getElementById('rho');
+    const notes = document.getElementById('notes');
+
+    if (isNaN(scfm) || isNaN(P_in) || isNaN(T_act_F)){
+      out_acfm.textContent = "—";
+      out_m_lbm.textContent = "—";
+      out_m_kgs.textContent = "—";
+      out_rho.textContent = "—";
+      notes.textContent = "Enter SCFM, pressure, and temperature.";
+      return;
+    }
+
+    const P_act_psia = (Punit === "psig") ? (P_in + P_ATM) : P_in;
+    const T_act_R = F_to_R(T_act_F);
+    const T_std_R = F_to_R(T_std_F);
+
+    // ACFM = SCFM * (P_std / P_act) * (T_act / T_std)
+    const acfm = scfm * (P_std / P_act_psia) * (T_act_R / T_std_R);
+
+    // Mass flow ≈ SCFM × rho_std  (educational approximation)
+    const m_lbm_min = scfm * stdDensity(T_std_F);
+    const m_kgs = lbm_min_to_kg_s(m_lbm_min);
+
+    // Actual density for display (ideal gas)
+    const rho_act = rho_air_psia_T(P_act_psia, T_act_F);
+
+    out_acfm.textContent = fmt(acfm, 6);
+    out_m_lbm.textContent = fmt(m_lbm_min, 6);
+    out_m_kgs.textContent = fmt(m_kgs, 6);
+    out_rho.textContent = fmt(rho_act, 6);
+
+    notes.textContent =
+`Assumptions:
+• Ideal gas (air). No compressibility factor (Z=1).
+• SCFM is referenced to P_std=${fmt(P_std,3)} psia and T_std=${T_std_F}°F.
+• Mass flow uses standard air density at chosen T_std (approx.): ${stdDensity(T_std_F)} lbm/ft³.
+• ACFM valid away from choked conditions and where pressure/temperature are uniform at the measurement plane.`;
+  }
+
+  document.getElementById('calc').addEventListener('click', calc);
+  document.getElementById('reset').addEventListener('click', ()=>{ window.location.reload(); });
+  document.getElementById('copy').addEventListener('click', ()=>{
+    const acfm = document.getElementById('acfm').textContent;
+    const m1 = document.getElementById('m_lbm').textContent;
+    const m2 = document.getElementById('m_kgs').textContent;
+    const rho = document.getElementById('rho').textContent;
+    const blob = `ACFM: ${acfm} ft^3/min\nMass flow: ${m1} lbm/min (${m2} kg/s)\nAir density (actual): ${rho} lbm/ft^3`;
+    navigator.clipboard.writeText(blob).then(()=>{
+      alert('Results copied to clipboard.');
+    }, ()=>{
+      // Fallback if clipboard blocked
+      const ta = document.createElement('textarea');
+      ta.value = blob; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); alert('Results copied to clipboard.'); }catch(e){ alert('Copy failed'); }
+      document.body.removeChild(ta);
+    });
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
