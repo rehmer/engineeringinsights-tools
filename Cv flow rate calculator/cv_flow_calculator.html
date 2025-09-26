@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Cv Flow Rate Calculator</title>
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, Arial, sans-serif;
+            margin: 0;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 
+                0 12px 48px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .container > * {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 8px 24px rgba(255, 215, 0, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+        
+        .header-content {
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin: 0 0 8px 0;
+            color: #FFD700;
+            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #b0b0b0;
+            font-size: 1.2em;
+            margin: 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin: 16px 0 24px 0;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 165, 0, 0.15) 100%);
+            border: 1px solid #FFD700;
+            color: #FFD700;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+        }
+        
+        .ads-section {
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .ads-placeholder {
+            color: #666;
+            font-size: 1.1em;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 215, 0, 0.05) 10px,
+                rgba(255, 215, 0, 0.05) 20px
+            );
+            padding: 40px;
+            border: 2px dashed #444;
+            border-radius: 8px;
+            width: 100%;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .input-group {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(68, 68, 68, 0.6);
+            transition: all 0.3s ease;
+            box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.05);
+        }
+        
+        .input-group:hover {
+            border-color: rgba(255, 215, 0, 0.4);
+            box-shadow: 
+                0 4px 16px rgba(255, 215, 0, 0.1),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .input-group h3 {
+            margin: 0 0 16px 0;
+            color: #FFD700;
+            font-size: 1.3em;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #c0c0c0;
+            font-size: 0.95em;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid rgba(68, 68, 68, 0.6);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #e0e0e0;
+            font-size: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        select {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            color: #FFD700;
+            font-weight: 600;
+        }
+        
+        select option {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            padding: 8px;
+        }
+        
+        select option:hover {
+            background: #3a3a3a;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+        }
+        
+        button {
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(135deg, #FFEF00 0%, #FFB500 100%);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+        
+        .result-card {
+            background: linear-gradient(145deg, #2a2a2a 0%, #1f1f1f 100%);
+            border: 2px solid #FFD700;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 8px 24px rgba(255, 215, 0, 0.15),
+                inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .result-card.secondary {
+            border-color: #FFA500;
+            box-shadow: 
+                0 8px 24px rgba(255, 165, 0, 0.15),
+                inset 0 1px 0 rgba(255, 165, 0, 0.1);
+        }
+        
+        .result-card.tertiary {
+            border-color: #FF8C00;
+            box-shadow: 
+                0 8px 24px rgba(255, 140, 0, 0.15),
+                inset 0 1px 0 rgba(255, 140, 0, 0.1);
+        }
+        
+        .result-header {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 12px;
+            opacity: 0.9;
+            color: #c0c0c0;
+        }
+        
+        .result-value {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .result-card .result-value {
+            color: #FFD700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .result-card.secondary .result-value {
+            color: #FFA500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .result-card.tertiary .result-value {
+            color: #FF8C00;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .result-details {
+            font-size: 0.85em;
+            color: #a0a0a0;
+            line-height: 1.5;
+        }
+        
+        .flow-condition-indicator {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin: 16px 0;
+            text-align: center;
+            border: 2px solid;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .choked-flow {
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.2) 0%, rgba(255, 140, 0, 0.2) 100%);
+            border-color: #FF6B35;
+            color: #FF6B35;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+        
+        .non-choked-flow {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%);
+            border-color: #22C55E;
+            color: #22C55E;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+        
+        .info-section {
+            margin-top: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(68, 68, 68, 0.3) 0%, rgba(34, 34, 34, 0.3) 100%);
+            border-radius: 16px;
+            border-left: 4px solid #FFD700;
+            box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .info-section h3 {
+            color: #FFD700;
+            margin-top: 0;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .formula {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #e0e0e0;
+            margin: 12px 0;
+            text-align: center;
+            font-size: 1.1em;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.1);
+        }
+        
+        .formula-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        .formula-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(68, 68, 68, 0.6);
+            box-shadow: inset 0 1px 0 rgba(255, 215, 0, 0.05);
+        }
+        
+        .formula-card h4 {
+            color: #FFD700;
+            margin: 0 0 12px 0;
+            font-size: 1.1em;
+        }
+        
+        .formula-card .formula {
+            font-size: 0.9em;
+            margin: 8px 0;
+        }
+        
+        .accuracy-notice {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 16px 0;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .formula-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="logo.png" alt="Company Logo">
+            </div>
+            <div class="header-content">
+                <h1>Cv Flow Rate Calculator</h1>
+                <p class="subtitle">Valve Flow Coefficient Calculator</p>
+            </div>
+        </div>
+        
+        <div class="ads-section" style="display: none;">
+            <div class="ads-placeholder">
+                <strong>Google AdSense Placement</strong><br>
+                728x90 Leaderboard or 320x50 Mobile Banner<br>
+                <small>Replace this div with your ad code</small>
+            </div>
+        </div>
+        
+        <div class="form-grid">
+            <div class="input-group">
+                <h3>Pressure Conditions</h3>
+                <label for="pinlet">Inlet Pressure (P₁):</label>
+                <input type="number" id="pinlet" step="0.1" min="0" placeholder="Enter inlet pressure" value="280" required>
+                <label for="pinletUnit">Inlet Pressure Unit:</label>
+                <select id="pinletUnit">
+                    <option value="psig">PSIG (Gauge)</option>
+                    <option value="psia">PSIA (Absolute)</option>
+                </select>
+                
+                <label for="poutlet">Outlet Pressure (P₂):</label>
+                <input type="number" id="poutlet" step="0.1" min="0" placeholder="Enter outlet pressure" value="270" required>
+                <label for="poutletUnit">Outlet Pressure Unit:</label>
+                <select id="poutletUnit">
+                    <option value="psig">PSIG (Gauge)</option>
+                    <option value="psia">PSIA (Absolute)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <h3>Gas Properties & Conditions</h3>
+                <label for="gasType">Gas Type:</label>
+                <select id="gasType">
+                    <option value="air">Air (MW: 28.97)</option>
+                    <option value="nitrogen">Nitrogen (MW: 28.014)</option>
+                    <option value="argon">Argon (MW: 39.948)</option>
+                    <option value="oxygen">Oxygen (MW: 31.998)</option>
+                    <option value="carbon-dioxide">Carbon Dioxide (MW: 44.01)</option>
+                    <option value="helium">Helium (MW: 4.003)</option>
+                    <option value="hydrogen">Hydrogen (MW: 2.016)</option>
+                    <option value="methane">Methane (MW: 16.043)</option>
+                    <option value="propane">Propane (MW: 44.097)</option>
+                    <option value="ammonia">Ammonia (MW: 17.031)</option>
+                </select>
+                
+                <label for="temperature">Temperature:</label>
+                <input type="number" id="temperature" step="0.1" placeholder="Enter temperature" value="70" required>
+                <label for="tempUnit">Temperature Unit:</label>
+                <select id="tempUnit">
+                    <option value="F">Fahrenheit (°F)</option>
+                    <option value="C">Celsius (°C)</option>
+                    <option value="K">Kelvin (K)</option>
+                    <option value="R">Rankine (°R)</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <h3>Valve Properties</h3>
+                <label for="cv">Flow Coefficient (Cv):</label>
+                <input type="number" id="cv" step="0.01" min="0.01" placeholder="Enter Cv value" value="1.3" required>
+                
+                <label for="patm">Atmospheric Pressure (Patm):</label>
+                <input type="number" id="patm" step="0.1" min="0" placeholder="Atmospheric pressure" value="14.7" required>
+                <select id="patmUnit">
+                    <option value="psi">PSI</option>
+                </select>
+                
+                <div id="gasInfo" class="accuracy-notice">
+                    <strong>Air</strong> - Molecular Weight: 28.97 g/mol<br>
+                    Specific Heat Ratio (γ): 1.4<br>
+                    Standard Density: 1.293 kg/m³
+                </div>
+            </div>
+        </div>
+        
+        <button onclick="calculateCvFlow()">Calculate Flow Rate</button>
+        
+        <div id="flowCondition" class="flow-condition-indicator" style="display: none;">
+            Flow Condition: Calculating...
+        </div>
+        
+        <div id="resultsSection" class="results-grid" style="display: none;">
+            <div class="result-card">
+                <div class="result-header">Volumetric Flow Rate</div>
+                <div class="result-value" id="volumetricFlowValue">---</div>
+                <div class="result-details" id="volumetricFlowDetails">SCFM and ACFM values</div>
+            </div>
+            
+            <div class="result-card secondary">
+                <div class="result-header">Mass Flow Rate</div>
+                <div class="result-value" id="massFlowValue">---</div>
+                <div class="result-details" id="massFlowDetails">Multiple units provided</div>
+            </div>
+            
+            <div class="result-card tertiary">
+                <div class="result-header">Pressure Drop</div>
+                <div class="result-value" id="pressureDropValue">---</div>
+                <div class="result-details" id="pressureDropDetails">Pressure ratio and conditions</div>
+            </div>
+        </div>
+        
+        <div class="ads-section" style="display: none;">
+            <div class="ads-placeholder">
+                <strong>Google AdSense Placement</strong><br>
+                300x250 Medium Rectangle<br>
+                <small>Replace this div with your ad code</small>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h3>Cv Flow Rate Calculator - Theory & Applications</h3>
+            
+            <div class="formula-grid">
+                <div class="formula-card">
+                    <h4>Low Pressure Drop (P₂ > ½P₁)</h4>
+                    <div class="formula">
+                        q = N₂CᵥP₁(1 - 2ΔP/3P₁)√(ΔP/(P₁GᵧT₁))
+                    </div>
+                    <p style="font-size: 0.85em; color: #a0a0a0; margin: 8px 0 0 0;">
+                        Used when outlet pressure is greater than half the inlet pressure. Accounts for gas expansion effects.
+                    </p>
+                </div>
+                
+                <div class="formula-card">
+                    <h4>High Pressure Drop (P₂ < ½P₁)</h4>
+                    <div class="formula">
+                        q = 0.471 N₂CᵥP₁ √(1/(GᵧT₁))
+                    </div>
+                    <p style="font-size: 0.85em; color: #a0a0a0; margin: 8px 0 0 0;">
+                        Used for choked flow conditions. Flow becomes independent of downstream pressure due to sonic velocity limit.
+                    </p>
+                </div>
+            </div>
+            
+            <h4>Key Parameters:</h4>
+            <ul>
+                <li><strong>q:</strong> Flow rate in SCFM (Standard Cubic Feet per Minute)</li>
+                <li><strong>N₂:</strong> Numerical constant for units (1360 for SCFM, psig, and °R)</li>
+                <li><strong>Cᵥ:</strong> Flow coefficient - the flow rate of 60°F water that produces 1 psi pressure drop</li>
+                <li><strong>P₁:</strong> Upstream absolute pressure (PSIA)</li>
+                <li><strong>P₂:</strong> Downstream absolute pressure (PSIA)</li>
+                <li><strong>ΔP:</strong> Pressure drop (P₁ - P₂)</li>
+                <li><strong>Gᵧ:</strong> Specific gravity of gas (relative to air = 1.0)</li>
+                <li><strong>T₁:</strong> Upstream absolute temperature (°R)</li>
+            </ul>
+            
+            <h4>Applications:</h4>
+            <ul>
+                <li><strong>Control Valve Sizing:</strong> Determine proper valve size for required flow rates</li>
+                <li><strong>System Design:</strong> Calculate expected flow rates through existing valves</li>
+                <li><strong>Process Control:</strong> Predict valve performance under varying conditions</li>
+                <li><strong>Safety Analysis:</strong> Assess maximum flow rates during emergency conditions</li>
+            </ul>
+            
+            <h4>Critical Flow (Choked) Conditions:</h4>
+            <p>When P₂ ≤ ½P₁, the gas reaches sonic velocity at the valve throat. Further reduction in downstream pressure does not increase flow rate - this is the "sound barrier" for gas flow through valves.</p>
+            
+            <div class="accuracy-notice">
+                <strong>Engineering Accuracy:</strong> These calculations are based on standard ISA/ANSI valve flow equations widely used in process industries. Results are typically accurate within ±5% for most engineering applications when proper Cv values are used.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced gas properties database
+        const GAS_PROPERTIES = {
+            air: {
+                name: 'Air',
+                molarMass: 28.97,
+                heatRatio: 1.4,
+                specificGravity: 1.0,
+                stdDensity: 1.293 // kg/m³ at STP
+            },
+            nitrogen: {
+                name: 'Nitrogen',
+                molarMass: 28.014,
+                heatRatio: 1.4,
+                specificGravity: 0.97,
+                stdDensity: 1.250
+            },
+            argon: {
+                name: 'Argon',
+                molarMass: 39.948,
+                heatRatio: 1.67,
+                specificGravity: 1.38,
+                stdDensity: 1.784
+            },
+            oxygen: {
+                name: 'Oxygen',
+                molarMass: 31.998,
+                heatRatio: 1.4,
+                specificGravity: 1.105,
+                stdDensity: 1.429
+            },
+            'carbon-dioxide': {
+                name: 'Carbon Dioxide',
+                molarMass: 44.01,
+                heatRatio: 1.30,
+                specificGravity: 1.53,
+                stdDensity: 1.977
+            },
+            helium: {
+                name: 'Helium',
+                molarMass: 4.003,
+                heatRatio: 1.67,
+                specificGravity: 0.14,
+                stdDensity: 0.178
+            },
+            hydrogen: {
+                name: 'Hydrogen',
+                molarMass: 2.016,
+                heatRatio: 1.41,
+                specificGravity: 0.07,
+                stdDensity: 0.090
+            },
+            methane: {
+                name: 'Methane',
+                molarMass: 16.043,
+                heatRatio: 1.31,
+                specificGravity: 0.555,
+                stdDensity: 0.717
+            },
+            propane: {
+                name: 'Propane',
+                molarMass: 44.097,
+                heatRatio: 1.13,
+                specificGravity: 1.56,
+                stdDensity: 2.020
+            },
+            ammonia: {
+                name: 'Ammonia',
+                molarMass: 17.031,
+                heatRatio: 1.31,
+                specificGravity: 0.597,
+                stdDensity: 0.771
+            }
+        };
+        
+        // Unit conversion functions
+        function toFahrenheit(temp, unit) {
+            switch(unit) {
+                case 'F': return temp;
+                case 'C': return temp * 9/5 + 32;
+                case 'K': return (temp - 273.15) * 9/5 + 32;
+                case 'R': return temp - 459.67;
+                default: return temp;
+            }
+        }
+        
+        function toRankine(temp, unit) {
+            switch(unit) {
+                case 'F': return temp + 459.67;
+                case 'C': return (temp + 273.15) * 9/5;
+                case 'K': return temp * 9/5;
+                case 'R': return temp;
+                default: return temp + 459.67;
+            }
+        }
+        
+        function toPSIA(pressure, unit) {
+            switch(unit) {
+                case 'psia': return pressure;
+                case 'psig': return pressure + 14.7;
+                default: return pressure;
+            }
+        }
+        
+        // Update gas info display
+        document.getElementById('gasType').addEventListener('change', function() {
+            const gasInfo = document.getElementById('gasInfo');
+            const gas = GAS_PROPERTIES[this.value];
+            if (gas) {
+                gasInfo.innerHTML = `<strong>${gas.name}</strong> - Molecular Weight: ${gas.molarMass} g/mol<br>
+                                   Specific Heat Ratio (γ): ${gas.heatRatio}<br>
+                                   Standard Density: ${gas.stdDensity.toFixed(3)} kg/m³`;
+            }
+        });
+        
+        function calculateCvFlow() {
+            try {
+                // Get input values
+                const pinlet = parseFloat(document.getElementById('pinlet').value);
+                const pinletUnit = document.getElementById('pinletUnit').value;
+                const poutlet = parseFloat(document.getElementById('poutlet').value);
+                const poutletUnit = document.getElementById('poutletUnit').value;
+                const temperature = parseFloat(document.getElementById('temperature').value);
+                const tempUnit = document.getElementById('tempUnit').value;
+                const cv = parseFloat(document.getElementById('cv').value);
+                const patm = parseFloat(document.getElementById('patm').value);
+                const gasType = document.getElementById('gasType').value;
+                
+                // Validate inputs
+                if (isNaN(pinlet) || isNaN(poutlet) || isNaN(temperature) || isNaN(cv) || isNaN(patm)) {
+                    throw new Error('Please enter valid numbers for all required fields');
+                }
+                
+                if (cv <= 0) {
+                    throw new Error('Cv must be greater than zero');
+                }
+                
+                // Convert to absolute pressures
+                const P1 = toPSIA(pinlet, pinletUnit); // PSIA
+                const P2 = toPSIA(poutlet, poutletUnit); // PSIA
+                
+                if (P1 <= P2) {
+                    throw new Error('Inlet pressure must be greater than outlet pressure');
+                }
+                
+                // Convert temperature to Rankine
+                const T1 = toRankine(temperature, tempUnit); // °R
+                
+                if (T1 <= 0) {
+                    throw new Error('Temperature must be greater than absolute zero');
+                }
+                
+                // Get gas properties
+                const gas = GAS_PROPERTIES[gasType];
+                if (!gas) {
+                    throw new Error('Selected gas type not found');
+                }
+                
+                const Gg = gas.specificGravity; // Specific gravity relative to air
+                const deltaP = P1 - P2; // Pressure drop
+                const pressureRatio = P2 / P1;
+                
+                // Numerical constant N2 for SCFM, psig, and °R units
+                const N2 = 1360;
+                
+                let q_scfm; // Flow rate in SCFM
+                let flowCondition;
+                let equation;
+                
+                // Determine flow condition and calculate accordingly
+                if (P2 > (P1 / 2)) {
+                    // Low pressure drop (non-choked flow)
+                    // q = N2 * Cv * P1 * (1 - 2*ΔP/(3*P1)) * √(ΔP/(P1*Gg*T1))
+                    const term1 = N2 * cv * P1;
+                    const term2 = 1 - (2 * deltaP) / (3 * P1);
+                    const term3 = Math.sqrt(deltaP / (P1 * Gg * T1));
+                    q_scfm = term1 * term2 * term3;
+                    flowCondition = 'Non-Choked Flow';
+                    equation = 'Low Pressure Drop Equation';
+                } else {
+                    // High pressure drop (choked flow)
+                    // q = 0.471 * N2 * Cv * P1 * √(1/(Gg*T1))
+                    q_scfm = 0.471 * N2 * cv * P1 * Math.sqrt(1 / (Gg * T1));
+                    flowCondition = 'Choked Flow';
+                    equation = 'High Pressure Drop Equation';
+                }
+                
+                // Calculate actual density at inlet conditions using ideal gas law
+                const R = 8.314; // Universal gas constant J/(mol·K)
+                const T_kelvin = (T1 - 459.67) * 5/9; // Convert R to K
+                const P_pascal = P1 * 6895; // Convert psia to Pa
+                const density_kg_m3 = (P_pascal * gas.molarMass) / (1000 * R * T_kelvin);
+                const density_lb_ft3 = density_kg_m3 * 0.062428;
+                
+                // Calculate mass flow rate
+                const std_density_lb_ft3 = gas.stdDensity * 0.062428; // Convert kg/m³ to lb/ft³
+                const massFlow_lb_min = q_scfm * std_density_lb_ft3;
+                const massFlow_lb_hr = massFlow_lb_min * 60;
+                const massFlow_kg_hr = massFlow_lb_hr * 0.453592;
+                const massFlow_g_s = massFlow_kg_hr * 1000 / 3600;
+                
+                // Calculate ACFM (Actual Cubic Feet per Minute)
+                const q_acfm = massFlow_lb_min / density_lb_ft3;
+                
+                // Display flow condition
+                const flowConditionEl = document.getElementById('flowCondition');
+                flowConditionEl.style.display = 'block';
+                if (flowCondition === 'Choked Flow') {
+                    flowConditionEl.className = 'flow-condition-indicator choked-flow';
+                    flowConditionEl.innerHTML = `🔥 ${flowCondition} - Sonic velocity reached at valve throat`;
+                } else {
+                    flowConditionEl.className = 'flow-condition-indicator non-choked-flow';
+                    flowConditionEl.innerHTML = `✓ ${flowCondition} - Subsonic flow conditions`;
+                }
+                
+                // Update results
+                document.getElementById('volumetricFlowValue').textContent = `${q_scfm.toFixed(2)} SCFM`;
+                document.getElementById('volumetricFlowDetails').innerHTML = `
+                    ACFM: ${q_acfm.toFixed(2)}<br>
+                    SCFM/ACFM Ratio: ${(q_scfm/q_acfm).toFixed(3)}<br>
+                    ${equation}
+                `;
+                
+                document.getElementById('massFlowValue').textContent = `${massFlow_lb_min.toFixed(3)} lb/min`;
+                document.getElementById('massFlowDetails').innerHTML = `
+                    ${massFlow_lb_hr.toFixed(1)} lb/hr<br>
+                    ${massFlow_kg_hr.toFixed(1)} kg/hr<br>
+                    ${massFlow_g_s.toFixed(2)} g/s
+                `;
+                
+                document.getElementById('pressureDropValue').textContent = `${deltaP.toFixed(1)} psi`;
+                document.getElementById('pressureDropDetails').innerHTML = `
+                    Pressure Ratio (P₂/P₁): ${pressureRatio.toFixed(3)}<br>
+                    Critical Ratio: ${(0.5).toFixed(3)}<br>
+                    Condition: ${flowCondition}
+                `;
+                
+                document.getElementById('resultsSection').style.display = 'grid';
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+                console.error('Calculation error:', error);
+                document.getElementById('flowCondition').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'none';
+            }
+        }
+        
+        // Event listeners for real-time updates
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateCvFlow();
+            }
+        });
+        
+        // Auto-calculate when key inputs change
+        ['pinlet', 'poutlet', 'cv', 'temperature'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                // Small delay to avoid excessive calculations while typing
+                clearTimeout(this.calculateTimeout);
+                this.calculateTimeout = setTimeout(calculateCvFlow, 500);
+            });
+        });
+        
+        // Immediate calculation when units or gas type change
+        ['pinletUnit', 'poutletUnit', 'tempUnit', 'gasType'].forEach(id => {
+            document.getElementById(id).addEventListener('change', calculateCvFlow);
+        });
+        
+        // Initialize with calculation on load
+        window.addEventListener('load', function() {
+            calculateCvFlow();
+        });
+    </script>
+</body>
+</html>
